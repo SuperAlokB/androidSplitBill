@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">SplitTeamBill</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">Add Group</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Add Bill</string>
+
     <!--string for login button-->
     <string name="login">Login</string>
     <!--string for edittext hint in password-->
