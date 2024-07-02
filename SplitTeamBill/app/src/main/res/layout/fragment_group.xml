@@ -1,22 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.group.GroupFragment">
-
-    <TextView
-        android:id="@+id/text_group"
+    <!--on below line we are creating edit text
+        for adding a new item to list-->
+    <EditText
+        android:id="@+id/idEdtItemName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_margin="4dp"
+        android:layout_toLeftOf="@id/idBtnAdd"
+        android:hint="Enter item name to add in ist"
+        app:layout_constraintEnd_toEndOf="parent" />
+        />
+
+    <!--button for adding item from edit text to list-->
+    <Button
+        android:id="@+id/idBtnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="4dp"
+        android:text="Add Member"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!--list view to display list of languages-->
+    <ListView
+        android:id="@+id/idLVLanguages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/idEdtItemName"
+        android:layout_marginTop="52dp"
         android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/idEdtItemName" />
+    />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

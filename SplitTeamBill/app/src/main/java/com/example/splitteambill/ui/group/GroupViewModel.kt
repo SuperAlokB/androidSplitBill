@@ -9,5 +9,5 @@ class GroupViewModel : ViewModel() {
     private val _text = MutableLiveData<String>().apply {
         value = "Add Group Members"
     }
-    val text: LiveData<String> = _text
+    //val text: LiveData<String> = _text
 }
