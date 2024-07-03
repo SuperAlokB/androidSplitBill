@@ -52,10 +52,18 @@ class GroupFragment : Fragment() {
         lngList.add("Alok")
 
 
-//        val textView: TextView = binding.textGroup
-//        groupViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
+        val editCGSTTax: TextView = binding.idEditCGST
+        val editSGSTTax: TextView = binding.idEditSGST
+        val editVat:TextView = binding.idEditVAT
+        groupViewModel.cgst.observe(viewLifecycleOwner) {
+            editCGSTTax.text = it
+        }
+        groupViewModel.sgst.observe(viewLifecycleOwner) {
+            editSGSTTax.text = it
+        }
+        groupViewModel.vatTax.observe(viewLifecycleOwner) {
+            editVat.text = it
+        }
 
         // on below line we are initializing adapter for our list view.
         val adapter: ArrayAdapter<String?> = ArrayAdapter<String?>(
@@ -79,6 +87,7 @@ class GroupFragment : Fragment() {
                 // that data in list is updated to update our list view.
                 adapter.notifyDataSetChanged()
             }
+            itemEdt.text.clear()
         }
             delBtn.setOnClickListener {
                 // on below line we are getting text from edit text
@@ -93,7 +102,7 @@ class GroupFragment : Fragment() {
                     // that data in list is updated to update our list view.
                     adapter.notifyDataSetChanged()
                 }
-
+                itemEdt.text.clear()
 
             }
 

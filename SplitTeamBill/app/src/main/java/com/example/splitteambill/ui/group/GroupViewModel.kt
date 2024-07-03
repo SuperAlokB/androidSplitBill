@@ -7,7 +7,12 @@ import androidx.lifecycle.ViewModel
 class GroupViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "Add Group Members"
+        value = "2.5 %"
     }
-    //val text: LiveData<String> = _text
+    private val _vat = MutableLiveData<String>().apply {
+        value = "10 %"
+    }
+    val cgst: LiveData<String> = _text
+    val sggt: LiveData<String> = _text
+    val vatTax: LiveData<String> = _vat
 }
