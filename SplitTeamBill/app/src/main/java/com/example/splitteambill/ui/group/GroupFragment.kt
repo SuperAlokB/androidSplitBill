@@ -20,6 +20,7 @@ class GroupFragment : Fragment() {
     // on below line we are creating a variable.
     lateinit var languageLV: ListView
     lateinit var addBtn: Button
+    lateinit var delBtn: Button
     lateinit var itemEdt: EditText
     lateinit var lngList: ArrayList<String>
 
@@ -43,12 +44,13 @@ class GroupFragment : Fragment() {
         // on below line we are initializing our variables.
         languageLV = binding.idLVLanguages
         addBtn = binding.idBtnAdd
+        delBtn = binding.idBtnRemove
         itemEdt = binding.idEdtItemName
         lngList = ArrayList()
 
         // on below line we are adding items to our list
-        lngList.add("Member1")
-        lngList.add("Member2")
+        lngList.add("Alok")
+
 
 //        val textView: TextView = binding.textGroup
 //        groupViewModel.text.observe(viewLifecycleOwner) {
@@ -65,7 +67,7 @@ class GroupFragment : Fragment() {
         // on below line we are setting adapter for our list view.
         languageLV.adapter = adapter
         addBtn.setOnClickListener {
-        // on below line we are getting text from edit text
+            // on below line we are getting text from edit text
             val item = itemEdt.text.toString()
 
             // on below line we are checking if item is not empty
@@ -78,6 +80,23 @@ class GroupFragment : Fragment() {
                 adapter.notifyDataSetChanged()
             }
         }
+            delBtn.setOnClickListener {
+                // on below line we are getting text from edit text
+                val item = itemEdt.text.toString()
+
+                // on below line we are checking if item is not empty
+                if (item.isNotEmpty()) {
+                    // on below line we are adding item to our list.
+                    lngList.remove(item)
+
+                    // on below line we are notifying adapter
+                    // that data in list is updated to update our list view.
+                    adapter.notifyDataSetChanged()
+                }
+
+
+            }
+
 
 
         return root

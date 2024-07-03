@@ -15,21 +15,27 @@
         android:layout_margin="4dp"
         android:layout_toLeftOf="@id/idBtnAdd"
         android:hint="Enter item name to add in ist"
-        app:layout_constraintEnd_toEndOf="parent" />
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBaseline_toTopOf="parent"/>
+
 
     <!--button for adding item from edit text to list-->
-    <Button
-        android:id="@+id/idBtnAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="4dp"
-        android:text="Add Member"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <!--list view to display list of languages-->
+
+    <Button
+        android:id="@+id/idBtnAdd"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="100dp"
+        android:layout_marginEnd="156dp"
+        android:text="+"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="2dp" />
+
     <ListView
         android:id="@+id/idLVLanguages"
         android:layout_width="match_parent"
@@ -39,7 +45,17 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idEdtItemName" />
-    />
+
+    <Button
+        android:id="@+id/idBtnRemove"
+        android:layout_width="95dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="4dp"
+        android:text="-"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="0dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
