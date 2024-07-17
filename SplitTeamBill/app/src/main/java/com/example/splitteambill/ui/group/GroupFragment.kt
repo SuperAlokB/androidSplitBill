@@ -1,5 +1,6 @@
 package com.example.splitteambill.ui.group
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,16 +14,21 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
+import com.example.splitteambill.data.DBHelper
+
+
+
 
 class GroupFragment : Fragment() {
 
     // on below line we are creating a variable.
-    lateinit var languageLV: ListView
+    lateinit var teamListView: ListView
     lateinit var addBtn: Button
     lateinit var delBtn: Button
-    lateinit var itemEdt: EditText
-    lateinit var lngList: ArrayList<String>
+    lateinit var teamMateName: EditText
+    lateinit var membersList: ArrayList<String>
+
 
     private var _binding: FragmentGroupBinding? = null
 
@@ -42,23 +48,38 @@ class GroupFragment : Fragment() {
         val root: View = binding.root
 
         // on below line we are initializing our variables.
-        languageLV = binding.idLVLanguages
+        teamListView = binding.idListTeamMembers
         addBtn = binding.idBtnAdd
         delBtn = binding.idBtnRemove
-        itemEdt = binding.idEdtItemName
-        lngList = ArrayList()
+        teamMateName = binding.idEdtMemberName
+
+        membersList = ArrayList()
+        val db = DBHelper(requireContext(), null)
+
 
         // on below line we are adding items to our list
-        lngList.add("Alok")
+        //membersList.add("Alok")
+        val cursor = db.getName()
+        // moving the cursor to first position and
+        // appending value in the text view
+        cursor!!.moveToFirst()
+
+        membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+
+        while(cursor.moveToNext()){
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+        }
+
 
 
         val editCGSTTax: TextView = binding.idEditCGST
         val editSGSTTax: TextView = binding.idEditSGST
-        val editVat:TextView = binding.idEditVAT
+        val editVat: TextView = binding.idEditVAT
+
         groupViewModel.cgst.observe(viewLifecycleOwner) {
             editCGSTTax.text = it
         }
-        groupViewModel.sgst.observe(viewLifecycleOwner) {
+        groupViewModel.sggt.observe(viewLifecycleOwner) {
             editSGSTTax.text = it
         }
         groupViewModel.vatTax.observe(viewLifecycleOwner) {
@@ -69,44 +90,75 @@ class GroupFragment : Fragment() {
         val adapter: ArrayAdapter<String?> = ArrayAdapter<String?>(
             activity as Context,
             android.R.layout.simple_list_item_1,
-            lngList as List<String?>
+
+            membersList as List<String?>
         )
 
         // on below line we are setting adapter for our list view.
-        languageLV.adapter = adapter
-        addBtn.setOnClickListener {
-            // on below line we are getting text from edit text
-            val item = itemEdt.text.toString()
+        //languageLV.adapter = adapter
+        teamListView.adapter = adapter
 
+        //  languageLV.adapter = adapter
+        addBtn.setOnClickListener {
+
+            membersList.clear()
+            // on below line we are getting text from edit text
+            val memberName = teamMateName.text.toString()
             // on below line we are checking if item is not empty
-            if (item.isNotEmpty()) {
-                // on below line we are adding item to our list.
-                lngList.add(item)
+            if (memberName.isNotEmpty()) {
+
+                membersList.clear()
+                val age = 16
+                // name to our database
+                db.addName(memberName, age.toString())
+                 // Toast to message on the screen
+                Toast.makeText(requireContext(), memberName + " added to database", Toast.LENGTH_LONG).show()
+
+                val cursor = db.getName()
+                // moving the cursor to first position and
+                // appending value in the text view
+                cursor!!.moveToFirst()
+
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+
+                while(cursor.moveToNext()){
+                    membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+                }
 
                 // on below line we are notifying adapter
                 // that data in list is updated to update our list view.
                 adapter.notifyDataSetChanged()
             }
-            itemEdt.text.clear()
+            teamMateName.text.clear()
         }
-            delBtn.setOnClickListener {
-                // on below line we are getting text from edit text
-                val item = itemEdt.text.toString()
+        delBtn.setOnClickListener {
+            // on below line we are getting text from edit text
+            val memberName = teamMateName.text.toString()
+            // on below line we are checking if item is not empty
+            if (memberName.isNotEmpty()) {
+                membersList.clear()
+                // on below line we are adding item to our list.
+                //membersList.remove(memberName)
+                db.delName(memberName)
 
-                // on below line we are checking if item is not empty
-                if (item.isNotEmpty()) {
-                    // on below line we are adding item to our list.
-                    lngList.remove(item)
+                val cursor = db.getName()
+                // moving the cursor to first position and
+                // appending value in the text view
+                cursor!!.moveToFirst()
 
-                    // on below line we are notifying adapter
-                    // that data in list is updated to update our list view.
-                    adapter.notifyDataSetChanged()
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+
+                while(cursor.moveToNext()){
+                    membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
                 }
-                itemEdt.text.clear()
 
+                // on below line we are notifying adapter
+                // that data in list is updated to update our list view.
+                adapter.notifyDataSetChanged()
             }
+            teamMateName.text.clear()
 
-
+        }
 
         return root
     }
@@ -115,4 +167,15 @@ class GroupFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private suspend fun getData(){
+
+
+    }
+
 }
+
+
+
+
+
