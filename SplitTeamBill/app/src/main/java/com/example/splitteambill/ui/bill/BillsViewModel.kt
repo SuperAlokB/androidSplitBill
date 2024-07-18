@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 
 class BillsViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "Add Bill detail information "
-    }
-    val text: LiveData<String> = _text
+//    private val _text = MutableLiveData<String>().apply {
+//        value = "Bill Info "
+//    }
+//    val text: LiveData<String> = _text
 }
