@@ -16,15 +16,17 @@ class BillInput:DialogFragment() {
             // Use the Builder class for convenient dialog construction.
             val builder = AlertDialog.Builder(it)
             val inputEditText = EditText(requireContext())
+            inputEditText.hint = "Food Item Name"
             builder.setMessage("Enter Bill Item ")
                 .setView(inputEditText)
                 .setPositiveButton("Save") { dialog, id ->
                     // START THE GAME!
+                    val editTextValue = inputEditText.text.toString()
+                    Toast.makeText(requireContext(), "$editTextValue Bill info ", Toast.LENGTH_LONG).show()
                 }
                 .setNegativeButton("Cancel") { dialog, id ->
                     // User cancelled the dialog.
-                    val editTextValue = inputEditText.text.toString()
-                    Toast.makeText(requireContext(), "$editTextValue Bill infor ", Toast.LENGTH_LONG).show()
+
                 }
 
             // Create the AlertDialog object and return it.

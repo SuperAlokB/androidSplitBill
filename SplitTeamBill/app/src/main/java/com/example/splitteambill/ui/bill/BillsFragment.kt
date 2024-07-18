@@ -1,10 +1,14 @@
 package com.example.splitteambill.ui.bill
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.GridView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,15 +16,30 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.splitteambill.databinding.FragmentBillsBinding
 
+
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
 class BillsFragment : Fragment() {
 
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
     private var _binding: FragmentBillsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
     lateinit var addBtn: Button
+    lateinit var itemGrid: ArrayList<String>
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,6 +50,16 @@ class BillsFragment : Fragment() {
 
         _binding = FragmentBillsBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val gridView = binding.gridView
+        val adapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_1,getData())
+
+
+        gridView.adapter = adapter
+        gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            // Handle item click here
+            val selectedItem = adapter.getItem(position)
+            // Perform actions based on the selected item
+        }
         addBtn = binding.idBtnAdd
         addBtn.setOnClickListener {
 
@@ -44,5 +73,29 @@ class BillsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    // Replace this with your data source
+    private fun getData(): List<String> {
+        return listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
+    }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment fragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            BillsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 }
