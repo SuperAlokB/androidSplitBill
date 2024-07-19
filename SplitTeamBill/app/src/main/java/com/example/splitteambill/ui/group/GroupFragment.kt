@@ -60,16 +60,17 @@ class GroupFragment : Fragment() {
         // on below line we are adding items to our list
         //membersList.add("Alok")
         val cursor = db.getName()
-        // moving the cursor to first position and
-        // appending value in the text view
-        cursor!!.moveToFirst()
+        if(cursor !=null && cursor.count > 0) {
+            // moving the cursor to first position and
+            // appending value in the text view
+            cursor!!.moveToFirst()
 
-        membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
-
-        while(cursor.moveToNext()){
             membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
-        }
 
+            while (cursor.moveToNext()) {
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+            }
+        }
 
 
         val editCGSTTax: TextView = binding.idEditCGST

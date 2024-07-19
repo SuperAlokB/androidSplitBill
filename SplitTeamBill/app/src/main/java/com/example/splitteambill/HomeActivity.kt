@@ -1,5 +1,6 @@
 package com.example.splitteambill
 
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.splitteambill.data.DBHelper
 import com.example.splitteambill.databinding.ActivityMainBinding
 
 class HomeActivity : AppCompatActivity() {
@@ -18,6 +20,8 @@ class HomeActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         val navView: BottomNavigationView = binding.navView
 

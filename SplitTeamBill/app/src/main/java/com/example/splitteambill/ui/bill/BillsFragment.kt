@@ -60,7 +60,7 @@ class BillsFragment : Fragment() {
             val selectedItem = adapter.getItem(position)
             // Perform actions based on the selected item
         }
-        addBtn = binding.idBtnAdd
+        addBtn = binding.idBillBtnAdd
         addBtn.setOnClickListener {
 
             BillInput().show((activity as AppCompatActivity).supportFragmentManager , "Bill Input")
