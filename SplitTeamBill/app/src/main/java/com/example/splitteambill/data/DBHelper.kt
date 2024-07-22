@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper
 class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
 
+
+
     // below is the method for creating a database by a sqlite query
     override fun onCreate(db: SQLiteDatabase) {
         // below is a sqlite query, where column names
@@ -115,6 +117,29 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // at last we are
         // closing our database
         db.close()
+    }
+
+    fun getMemebersList() = ArrayList<String>().apply {
+        var membersList: ArrayList<String>
+          membersList = ArrayList()
+
+       // val db = this.writableDatabase
+        // on below line we are adding items to our list
+        //membersList.add("Alok")
+        val cursor = getName()
+        if(cursor !=null && cursor.count > 0) {
+            // moving the cursor to first position and
+            // appending value in the text view
+            cursor!!.moveToFirst()
+
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+
+            while (cursor.moveToNext()) {
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+            }
+        }
+
+        return   membersList
     }
 }
 

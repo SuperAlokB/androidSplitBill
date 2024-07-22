@@ -53,24 +53,25 @@ class GroupFragment : Fragment() {
         delBtn = binding.idBtnRemove
         teamMateName = binding.idEdtMemberName
 
-        membersList = ArrayList()
+        membersList = ArrayList<String>()
         val db = DBHelper(requireContext(), null)
+        membersList = db.getMemebersList()
 
-
-        // on below line we are adding items to our list
-        //membersList.add("Alok")
-        val cursor = db.getName()
-        if(cursor !=null && cursor.count > 0) {
-            // moving the cursor to first position and
-            // appending value in the text view
-            cursor!!.moveToFirst()
-
-            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
-
-            while (cursor.moveToNext()) {
-                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
-            }
-        }
+//
+//        // on below line we are adding items to our list
+//        //membersList.add("Alok")
+//        val cursor = db.getName()
+//        if(cursor !=null && cursor.count > 0) {
+//            // moving the cursor to first position and
+//            // appending value in the text view
+//            cursor!!.moveToFirst()
+//
+//            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+//
+//            while (cursor.moveToNext()) {
+//                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+//            }
+//        }
 
 
         val editCGSTTax: TextView = binding.idEditCGST
@@ -99,6 +100,7 @@ class GroupFragment : Fragment() {
         //languageLV.adapter = adapter
         teamListView.adapter = adapter
 
+
         //  languageLV.adapter = adapter
         addBtn.setOnClickListener {
 
@@ -108,7 +110,7 @@ class GroupFragment : Fragment() {
             // on below line we are checking if item is not empty
             if (memberName.isNotEmpty()) {
 
-                membersList.clear()
+               // membersList.clear()
                 val age = 16
                 // name to our database
                 db.addName(memberName, age.toString())
@@ -125,7 +127,7 @@ class GroupFragment : Fragment() {
                 while(cursor.moveToNext()){
                     membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
                 }
-
+             //  membersList = db.getMemebersList()
                 // on below line we are notifying adapter
                 // that data in list is updated to update our list view.
                 adapter.notifyDataSetChanged()
