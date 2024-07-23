@@ -41,7 +41,7 @@ class BillInput:DialogFragment() {
             // initialise the list items for the alert dialog
             val db = DBHelper(requireContext(), null)
 
-            val listItems = db.getMemebersList().toTypedArray()
+            val listItems = db.getMembersList().toTypedArray()
             //val listItems = arrayOf("C", "C++", "JAVA", "PYTHON")
             val checkedItems = BooleanArray(listItems.size)
 
@@ -68,12 +68,23 @@ class BillInput:DialogFragment() {
 
             // handle the positive button of the dialog
             builder.setPositiveButton("Save") { dialog, which ->
-               // val editTextValue = foodNameEditText.text.toString()
+                val foodName = foodNameEditText.text.toString()
+                val foodqty = foodQualityEditText.text.toString()
+                val foodprice = foodPriceEditText.text.toString()
+                //Calculate Bill total and add to to ths table
+
+
+                val total = (foodqty.toDouble() * foodprice.toDouble())
+                val  SGST = ( 2.5 * total ) / 100
+                val  CGST = ( 2.5 * total ) / 100
+                val finalTotal = total.toDouble() + SGST.toDouble() + CGST.toDouble()
+                db.addBill(foodName,foodqty.toDouble(),foodprice.toDouble(),finalTotal.toDouble())
                 for (i in checkedItems.indices) {
                     if (checkedItems[i]) {
                         //tvSelectedItemsPreview.text = String.format("%s%s, ", tvSelectedItemsPreview.text, selectedItems[i])
                         //Toast.makeText(requireContext(), selectedItems[i] + "Item Info :" + editTextValue, Toast.LENGTH_LONG).show()
                         Toast.makeText(requireContext(), "$foodNameEditText Bill info ", Toast.LENGTH_LONG).show()
+
                     }
                 }
             }

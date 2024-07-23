@@ -18,7 +18,8 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val teamMemberQuery = ("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + ID_COL + " INTEGER PRIMARY KEY, " +
                 NAME_COl + " TEXT," +
-                AGE_COL + " TEXT" + ")")
+                FOOD_COL + " TEXT" +
+                DRINKS_COL + "TEXT" + ")")
 
         // we are calling sqlite
         // method for executing our query
@@ -29,10 +30,11 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val billInfoQuery = (" CREATE TABLE IF NOT EXISTS \"Bill\" (\n" +
                 "            \"Id\"\tINTEGER NOT NULL,\n" +
                 "            \"food_name\"\tTEXT NOT NULL,\n" +
-                "            \"qty\"\tREAL NOT NULL,\n" +
-                "            \"price\"\tREAL NOT NULL,\n" +
-                "            \"total\"\tREAL NOT NULL,\n" +
-                "            PRIMARY KEY(\"id\" AUTOINCREMENT)\n" +
+                "            \"food_qty\"\tREAL NOT NULL,\n" +
+                "            \"food_price\"\tREAL NOT NULL,\n" +
+                "            \"total\"\tREAL,\n" +
+                "             \"team_members_Ids\"\tTEXT,\n" +
+                "            PRIMARY KEY(\"Id\" AUTOINCREMENT)\n" +
                 "        )")
 
         // we are calling sqlite
@@ -51,7 +53,7 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(db)
     }
     // This method is for adding data in our database
-    fun addName(name : String, age : String ){
+    fun addName(name : String ){
 
         // below we are creating
         // a content values variable
@@ -60,7 +62,8 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // we are inserting our values
         // in the form of key-value pair
         values.put(NAME_COl, name)
-        values.put(AGE_COL, age)
+       // values.put(FOOD_COL, null)
+        //values.put(AGE_COL, age)
 
         // here we are creating a
         // writable variable of
@@ -76,6 +79,39 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
+    // This method is for adding data in our database
+    fun addBill(food_name : String , food_qty: Double, food_price: Double, total:Double){
+
+        // below we are creating
+        // a content values variable
+        val values = ContentValues()
+
+        // we are inserting our values
+        // in the form of key-value pair
+        values.put(FOOD_NAME, food_name)
+        values.put(FOOD_QTY, food_qty)
+        values.put(FOOD_PRICE,food_price)
+        values.put(Total_Price,total)
+
+        // values.put(FOOD_COL, null)
+        //values.put(AGE_COL, age)
+
+        // here we are creating a
+        // writable variable of
+        // our database as we want to
+        // insert value in our database
+        val db = this.writableDatabase
+
+        // all values are inserted into database
+        db.insert("Bill", null, values)
+
+        // at last we are
+        // closing our database
+        db.close()
+    }
+
+
+
     // below method is to get
     // all data from our database
     fun getName(): Cursor? {
@@ -88,6 +124,22 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // below code returns a cursor to
         // read data from the database
         return db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
+
+    }
+
+
+    // below method is to get
+    // all data from our database
+    fun getFoodNames(): Cursor? {
+
+        // here we are creating a readable
+        // variable of our database
+        // as we want to read value from it
+        val db = this.readableDatabase
+
+        // below code returns a cursor to
+        // read data from the database
+        return db.rawQuery("SELECT * FROM " + "Bill", null)
 
     }
     companion object{
@@ -109,7 +161,16 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val NAME_COl = "name"
 
         // below is the variable for age column
-        val AGE_COL = "age"
+        val FOOD_COL = "food"
+
+        val DRINKS_COL = "drinks"
+        //Bill Information
+        val FOOD_NAME = "food_name"
+        val FOOD_QTY = "food_qty"
+        val FOOD_PRICE = "food_price"
+        val Total_Price = "total"
+        val Team_Members_IDs = "team_members_Ids"
+
     }
 
     // This method is for deleting  data in our database
@@ -139,7 +200,30 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
-    fun getMemebersList() = ArrayList<String>().apply {
+    fun getFoodItems() = ArrayList<String>().apply {
+        var membersList: ArrayList<String>
+        membersList = ArrayList()
+
+        // val db = this.writableDatabase
+        // on below line we are adding items to our list
+        //membersList.add("Alok")
+        val cursor = getFoodNames()
+        if(cursor !=null && cursor.count > 0) {
+            // moving the cursor to first position and
+            // appending value in the text view
+            cursor!!.moveToFirst()
+
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+
+            while (cursor.moveToNext()) {
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+            }
+        }
+
+        return   membersList
+    }
+
+    fun getMembersList() = ArrayList<String>().apply {
         var membersList: ArrayList<String>
           membersList = ArrayList()
 

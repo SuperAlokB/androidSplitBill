@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.splitteambill.data.DBHelper
 import com.example.splitteambill.databinding.FragmentBillsBinding
 
 
@@ -31,7 +32,10 @@ class BillsFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     lateinit var addBtn: Button
-    lateinit var itemGrid: ArrayList<String>
+    lateinit var itemGrid: List<String>
+    lateinit var grandTotal: TextView
+
+    // initialise the list items for the alert dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +44,7 @@ class BillsFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,12 +52,13 @@ class BillsFragment : Fragment() {
     ): View {
         val billsViewModel =
             ViewModelProvider(this).get(BillsViewModel::class.java)
-
+        itemGrid = getData()
         _binding = FragmentBillsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val gridView = binding.gridView
-        val adapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_1,getData())
-
+        val adapter =
+            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, itemGrid)
+        gridView.numColumns = 4
 
         gridView.adapter = adapter
         gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -61,10 +67,13 @@ class BillsFragment : Fragment() {
             // Perform actions based on the selected item
         }
         addBtn = binding.idBillBtnAdd
+        grandTotal = binding.idTxtTotalBill
+        grandTotal.text =  getTotalBill().toString()
         addBtn.setOnClickListener {
 
-            BillInput().show((activity as AppCompatActivity).supportFragmentManager , "Bill Input")
-            Toast.makeText(requireContext(),  " Add bill information ", Toast.LENGTH_LONG).show()
+            BillInput().show((activity as AppCompatActivity).supportFragmentManager, "Bill Input")
+            Toast.makeText(requireContext(), " Add bill information ", Toast.LENGTH_LONG).show()
+            grandTotal.text =  getTotalBill().toString()
         }
 
         return root
@@ -74,9 +83,46 @@ class BillsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
     // Replace this with your data source
     private fun getData(): List<String> {
-        return listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
+        val db = DBHelper(requireContext(), null)
+
+        val membersList = ArrayList<String>()
+        membersList as List<String?>
+        val cursor = db.getFoodNames()
+
+        if (cursor != null && cursor.count > 0) {
+            // moving the cursor to first position and
+            // appending value in the text view
+            cursor!!.moveToFirst()
+            membersList.add("Item")
+            membersList.add("Qty")
+            membersList.add("Price")
+            membersList.add("Total")
+
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_NAME)))
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_QTY)))
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_PRICE)))
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)))
+
+            while (cursor.moveToNext()) {
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_NAME)))
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_QTY)))
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_PRICE)))
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)))
+
+
+            }
+        }
+        // membersList.add("Biryani")
+        //  membersList.add("Biryani2")
+        //  membersList.add("Biryani3")
+
+        return membersList
+
+
+        // return listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
     }
 
     companion object {
@@ -97,5 +143,26 @@ class BillsFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    private fun getTotalBill(): Double {
+
+        val db = DBHelper(requireContext(), null)
+        var totalBill : Double  = 0.0
+
+
+        val cursor = db.getFoodNames()
+
+        if (cursor != null && cursor.count > 0) {
+            cursor!!.moveToFirst()
+            totalBill =  cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)).toDouble()
+            while (cursor.moveToNext()) {
+
+                totalBill += cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)).toDouble()
+
+
+            }
+        }
+        return totalBill
     }
 }
