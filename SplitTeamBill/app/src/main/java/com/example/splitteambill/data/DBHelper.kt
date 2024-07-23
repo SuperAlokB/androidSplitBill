@@ -15,14 +15,34 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
     override fun onCreate(db: SQLiteDatabase) {
         // below is a sqlite query, where column names
         // along with their data types is given
-        val query = ("CREATE TABLE " + TABLE_NAME + " ("
+        val teamMemberQuery = ("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + ID_COL + " INTEGER PRIMARY KEY, " +
                 NAME_COl + " TEXT," +
                 AGE_COL + " TEXT" + ")")
 
         // we are calling sqlite
         // method for executing our query
-        db.execSQL(query)
+        db.execSQL(teamMemberQuery)
+
+        //val TB_Name = "Bill"
+
+        val billInfoQuery = (" CREATE TABLE IF NOT EXISTS \"Bill\" (\n" +
+                "            \"Id\"\tINTEGER NOT NULL,\n" +
+                "            \"food_name\"\tTEXT NOT NULL,\n" +
+                "            \"qty\"\tREAL NOT NULL,\n" +
+                "            \"price\"\tREAL NOT NULL,\n" +
+                "            \"total\"\tREAL NOT NULL,\n" +
+                "            PRIMARY KEY(\"id\" AUTOINCREMENT)\n" +
+                "        )")
+
+        // we are calling sqlite
+        // method for executing our query
+        db.execSQL(billInfoQuery)
+
+        // we are calling sqlite
+        // method for executing our query
+        db.execSQL(teamMemberQuery)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
@@ -74,13 +94,13 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // here we have defined variables for our database
 
         // below is variable for database name
-        private val DATABASE_NAME = "GEEKS_FOR_GEEKS"
+        private val DATABASE_NAME = "SplitBills"
 
         // below is the variable for database version
         private val DATABASE_VERSION = 1
 
         // below is the variable for table name
-        val TABLE_NAME = "gfg_table"
+        val TABLE_NAME = "team_members"
 
         // below is the variable for id column
         val ID_COL = "id"

@@ -67,13 +67,13 @@ class BillInput:DialogFragment() {
             builder.setCancelable(false)
 
             // handle the positive button of the dialog
-            builder.setPositiveButton("Done") { dialog, which ->
-                val editTextValue = foodNameEditText.text.toString()
+            builder.setPositiveButton("Save") { dialog, which ->
+               // val editTextValue = foodNameEditText.text.toString()
                 for (i in checkedItems.indices) {
                     if (checkedItems[i]) {
                         //tvSelectedItemsPreview.text = String.format("%s%s, ", tvSelectedItemsPreview.text, selectedItems[i])
-                        Toast.makeText(requireContext(), selectedItems[i] + "Item Info :" + editTextValue, Toast.LENGTH_LONG).show()
-                       // Toast.makeText(requireContext(), "$foodNameEditText Bill info ", Toast.LENGTH_LONG).show()
+                        //Toast.makeText(requireContext(), selectedItems[i] + "Item Info :" + editTextValue, Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), "$foodNameEditText Bill info ", Toast.LENGTH_LONG).show()
                     }
                 }
             }
