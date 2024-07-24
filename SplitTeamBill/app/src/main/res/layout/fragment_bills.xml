@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
 
 
-        android:layout_height="500dp"
+        android:layout_height="550dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"
@@ -53,14 +53,46 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="72dp" />
 
+
     <TextView
-        android:id="@+id/idTxtTotalBill"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:id="@+id/idTxtFoodBill"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:text="Food  Bill"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        app:layout_constraintBaseline_toBottomOf="@+id/grid_view"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="557dp" />
+
+    <TextView
+        android:id="@+id/idTxLiquorBill"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:text="Liquor Bill"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/idTxtFoodBill"
+        app:layout_constraintBaseline_toBottomOf="@+id/grid_view"/>
+
+    <TextView
+        android:id="@+id/idTxTotalBill"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
         android:text="Grand Total"
         android:textColor="@android:color/black"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/idTxLiquorBill"
         app:layout_constraintBaseline_toBottomOf="@+id/grid_view"/>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

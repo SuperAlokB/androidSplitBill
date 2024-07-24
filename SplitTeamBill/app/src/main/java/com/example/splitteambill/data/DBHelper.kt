@@ -29,7 +29,8 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         val billInfoQuery = (" CREATE TABLE IF NOT EXISTS \"Bill\" (\n" +
                 "            \"Id\"\tINTEGER NOT NULL,\n" +
-                "            \"food_name\"\tTEXT NOT NULL,\n" +
+                "            \"food_name\"\tTEXT ,\n" +
+                "            \"liquor_name\"\tTEXT ,\n" +
                 "            \"food_qty\"\tREAL NOT NULL,\n" +
                 "            \"food_price\"\tREAL NOT NULL,\n" +
                 "            \"total\"\tREAL,\n" +
@@ -80,7 +81,7 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     // This method is for adding data in our database
-    fun addBill(food_name : String , food_qty: Double, food_price: Double, total:Double){
+    fun addBill(food_name : String , liquor_name:String , food_qty: Double, food_price: Double, total:Double){
 
         // below we are creating
         // a content values variable
@@ -92,6 +93,7 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put(FOOD_QTY, food_qty)
         values.put(FOOD_PRICE,food_price)
         values.put(Total_Price,total)
+        values.put(LIQUOR_NAME, liquor_name)
 
         // values.put(FOOD_COL, null)
         //values.put(AGE_COL, age)
@@ -166,6 +168,7 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val DRINKS_COL = "drinks"
         //Bill Information
         val FOOD_NAME = "food_name"
+        val LIQUOR_NAME = "liquor_name"
         val FOOD_QTY = "food_qty"
         val FOOD_PRICE = "food_price"
         val Total_Price = "total"

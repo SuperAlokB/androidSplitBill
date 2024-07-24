@@ -34,6 +34,8 @@ class BillsFragment : Fragment() {
     lateinit var addBtn: Button
     lateinit var itemGrid: List<String>
     lateinit var grandTotal: TextView
+    lateinit var foodBill: TextView
+    lateinit var liquorBill: TextView
 
     // initialise the list items for the alert dialog
 
@@ -67,13 +69,21 @@ class BillsFragment : Fragment() {
             // Perform actions based on the selected item
         }
         addBtn = binding.idBillBtnAdd
-        grandTotal = binding.idTxtTotalBill
+        grandTotal = binding.idTxTotalBill
+        foodBill = binding.idTxtFoodBill
+        liquorBill = binding.idTxLiquorBill
         grandTotal.text =  getTotalBill().toString()
+        foodBill.text = getTotalFoodBill().toString()
+        liquorBill.text = getTotalLiquorBill().toString()
+
         addBtn.setOnClickListener {
 
             BillInput().show((activity as AppCompatActivity).supportFragmentManager, "Bill Input")
             Toast.makeText(requireContext(), " Add bill information ", Toast.LENGTH_LONG).show()
             grandTotal.text =  getTotalBill().toString()
+            foodBill.text = getTotalFoodBill().toString()
+            liquorBill.text = getTotalLiquorBill().toString()
+
         }
 
         return root
@@ -101,13 +111,22 @@ class BillsFragment : Fragment() {
             membersList.add("Price")
             membersList.add("Total")
 
-            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_NAME)))
+                if(cursor.getString(cursor.getColumnIndex(DBHelper.LIQUOR_NAME)) != "") {
+                    membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.LIQUOR_NAME)))
+                }else{
+                    membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_NAME)))
+                }
             membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_QTY)))
             membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_PRICE)))
             membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)))
 
             while (cursor.moveToNext()) {
-                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_NAME)))
+                if(cursor.getString(cursor.getColumnIndex(DBHelper.LIQUOR_NAME)) != "") {
+                    membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.LIQUOR_NAME)))
+                }else{
+                    membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_NAME)))
+                }
+
                 membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_QTY)))
                 membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_PRICE)))
                 membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)))
@@ -159,6 +178,60 @@ class BillsFragment : Fragment() {
             while (cursor.moveToNext()) {
 
                 totalBill += cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)).toDouble()
+
+
+            }
+        }
+        return totalBill
+    }
+    private fun getTotalFoodBill(): Double {
+
+        val db = DBHelper(requireContext(), null)
+        var totalBill : Double  = 0.0
+
+
+        val cursor = db.getFoodNames()
+
+        if (cursor != null && cursor.count > 0) {
+            cursor!!.moveToFirst()
+
+            if(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_NAME)) != "") {
+                totalBill =  cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)).toDouble()
+            }
+
+            while (cursor.moveToNext()) {
+
+                if(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_NAME)) != "") {
+                    totalBill =  cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)).toDouble()
+                }
+
+
+
+            }
+        }
+        return totalBill
+    }
+    private fun getTotalLiquorBill(): Double {
+
+        val db = DBHelper(requireContext(), null)
+        var totalBill: Double = 0.0
+
+
+        val cursor = db.getFoodNames()
+        if (cursor != null && cursor.count > 0) {
+            cursor!!.moveToFirst()
+
+
+            if (cursor.getString(cursor.getColumnIndex(DBHelper.LIQUOR_NAME)) != "") {
+                totalBill = cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)).toDouble()
+            }
+
+            while (cursor.moveToNext()) {
+
+                if (cursor.getString(cursor.getColumnIndex(DBHelper.LIQUOR_NAME)) != "") {
+                    totalBill =
+                        cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)).toDouble()
+                }
 
 
             }

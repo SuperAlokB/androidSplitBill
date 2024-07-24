@@ -29,7 +29,7 @@
     <ListView
         android:id="@+id/idListTeamMembers"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="450dp"
         android:layout_below="@id/idEdtMemberName"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="4dp"
@@ -110,9 +110,11 @@
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="VAT %"
         android:textSize="20sp"
         app:layout_constraintBaseline_toBottomOf="@+id/idTxtliquortax"
-        app:layout_constraintTop_toBottomOf="@+id/idTxtliquortax" />
+        app:layout_constraintTop_toBottomOf="@+id/idTxtliquortax"
+        tools:layout_editor_absoluteX="27dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,8 @@ import android.content.DialogInterface.OnMultiChoiceClickListener
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -23,18 +25,31 @@ class BillInput:DialogFragment() {
 
 
             val foodNameEditText = EditText(requireContext())
+            val liquorNameEditText = EditText(requireContext())
             val foodQualityEditText = EditText(requireContext())
             val foodPriceEditText = EditText(requireContext())
+           // val radioButtonGroup = RadioGroup(requireContext())
+
+           // val foodChoiceRadioButton = RadioButton(requireContext())
+          //  val liquorChoiceRadioButton = RadioButton(requireContext())
 
             val layout = LinearLayout(context)
             layout.setOrientation(1)
 
-            foodNameEditText.hint = "Food Item Name"
+            foodNameEditText.hint = "Food Name"
+            liquorNameEditText.hint = "Liquor Name"
             foodQualityEditText.hint = "Quantity"
             foodPriceEditText.hint = "price"
+          //  foodChoiceRadioButton.text = "Food"
+           // liquorChoiceRadioButton.text = "Liquor"
+           // radioButtonGroup.addView(foodChoiceRadioButton)
+           // radioButtonGroup.addView(liquorChoiceRadioButton)
+          //  layout.addView(radioButtonGroup)
             layout.addView(foodNameEditText)
+            layout.addView(liquorNameEditText)
             layout.addView(foodQualityEditText)
             layout.addView(foodPriceEditText)
+
             // Use the Builder class for convenient dialog construction.
 
 
@@ -69,16 +84,25 @@ class BillInput:DialogFragment() {
             // handle the positive button of the dialog
             builder.setPositiveButton("Save") { dialog, which ->
                 val foodName = foodNameEditText.text.toString()
+                val liquorName = liquorNameEditText.text.toString()
                 val foodqty = foodQualityEditText.text.toString()
                 val foodprice = foodPriceEditText.text.toString()
                 //Calculate Bill total and add to to ths table
-
-
                 val total = (foodqty.toDouble() * foodprice.toDouble())
-                val  SGST = ( 2.5 * total ) / 100
-                val  CGST = ( 2.5 * total ) / 100
-                val finalTotal = total.toDouble() + SGST.toDouble() + CGST.toDouble()
-                db.addBill(foodName,foodqty.toDouble(),foodprice.toDouble(),finalTotal.toDouble())
+                var finalTotal = 0.0
+                if(foodName !="") {
+
+                    val SGST = (2.5 * total) / 100
+                    val CGST = (2.5 * total) / 100
+                    finalTotal = total.toDouble() + SGST.toDouble() + CGST.toDouble()
+                }else{
+// Need to calculate depending on VAT on liquor
+                    //val total = (foodqty.toDouble() * foodprice.toDouble())
+                    //val vat = (10 * total) / 100
+
+                     finalTotal = total.toDouble()
+                }
+                db.addBill(foodName,liquorName, foodqty.toDouble(),foodprice.toDouble(),finalTotal.toDouble())
                 for (i in checkedItems.indices) {
                     if (checkedItems[i]) {
                         //tvSelectedItemsPreview.text = String.format("%s%s, ", tvSelectedItemsPreview.text, selectedItems[i])
