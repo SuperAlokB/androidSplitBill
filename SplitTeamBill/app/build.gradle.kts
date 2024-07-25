@@ -54,7 +54,9 @@ dependencies {
     // DataStore
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
     implementation ("androidx.datastore:datastore-preferences-core:1.0.0")
-
+    implementation ("com.intuit.ssp:ssp-android:1.0.6")
+    implementation ("com.intuit.sdp:sdp-android:1.0.6")
+    implementation ("androidx.recyclerview:recyclerview:1.1.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

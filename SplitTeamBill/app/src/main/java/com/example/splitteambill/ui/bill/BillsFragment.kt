@@ -202,7 +202,7 @@ class BillsFragment : Fragment() {
             while (cursor.moveToNext()) {
 
                 if(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_NAME)) != "") {
-                    totalBill =  cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)).toDouble()
+                    totalBill +=  cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)).toDouble()
                 }
 
 
@@ -229,7 +229,7 @@ class BillsFragment : Fragment() {
             while (cursor.moveToNext()) {
 
                 if (cursor.getString(cursor.getColumnIndex(DBHelper.LIQUOR_NAME)) != "") {
-                    totalBill =
+                    totalBill +=
                         cursor.getString(cursor.getColumnIndex(DBHelper.Total_Price)).toDouble()
                 }
 
