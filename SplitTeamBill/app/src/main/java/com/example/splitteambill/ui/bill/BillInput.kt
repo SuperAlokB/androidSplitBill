@@ -103,12 +103,13 @@ class BillInput:DialogFragment() {
                      finalTotal = total.toDouble()
                 }
                 db.addBill(foodName,liquorName, foodqty.toDouble(),foodprice.toDouble(),finalTotal.toDouble())
+
                 for (i in checkedItems.indices) {
                     if (checkedItems[i]) {
                         //tvSelectedItemsPreview.text = String.format("%s%s, ", tvSelectedItemsPreview.text, selectedItems[i])
                         //Toast.makeText(requireContext(), selectedItems[i] + "Item Info :" + editTextValue, Toast.LENGTH_LONG).show()
-                        Toast.makeText(requireContext(), "$foodNameEditText Bill info ", Toast.LENGTH_LONG).show()
-
+                        Toast.makeText(requireContext(), checkedItems[i].toString() + "index :" + listItems [i], Toast.LENGTH_LONG).show()
+                        db.updateBillWithTeamName(foodName,listItems [i].toString())
                     }
                 }
             }

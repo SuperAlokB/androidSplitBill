@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.widget.Toast
 
 class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -34,7 +35,7 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "            \"food_qty\"\tREAL NOT NULL,\n" +
                 "            \"food_price\"\tREAL NOT NULL,\n" +
                 "            \"total\"\tREAL,\n" +
-                "             \"team_members_Ids\"\tTEXT,\n" +
+                "             \"team_members_Ids\"\tREAL,\n" +
                 "            PRIMARY KEY(\"Id\" AUTOINCREMENT)\n" +
                 "        )")
 
@@ -112,6 +113,55 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
+    fun updateBillWithTeamName(food_name : String , member_name:String ){
+        // below we are creating
+        // a content values variable
+        val values = ContentValues()
+
+        // we are inserting our values
+        // in the form of key-value pair
+       // values.put(FOOD_NAME, food_name)
+       // values.put(NAME_COl, member_name)
+
+        //Get member id from Member Name
+         val db = this.writableDatabase
+
+
+
+        val cursor =  db.rawQuery("select id From team_members where name = '" +  member_name + "'" , null)
+
+        //values.put(FOOD_NAME, food_name)
+
+
+        if(cursor !=null && cursor.count > 0) {
+            // moving the cursor to first position and
+            // appending value in the text view
+            cursor!!.moveToFirst()
+            var TeamMember_Id = cursor.getString(cursor.getColumnIndex(DBHelper.ID_COL))
+
+            if(TeamMember_Id == "") {
+
+                while (cursor.moveToNext()) {
+                    TeamMember_Id = cursor.getString(cursor.getColumnIndex(DBHelper.ID_COL))
+                }
+            }
+
+            values.put(Team_Members_IDs, TeamMember_Id)
+            // Which row to update, based on the title
+            val selection =  "food_name = ?"
+            val selectionArgs = arrayOf(food_name)
+            val count = db.update(
+                "Bill",
+                values,
+                selection,
+                selectionArgs)
+
+
+
+        }
+
+        db.close()
+    }
 
 
     // below method is to get
@@ -172,6 +222,7 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val FOOD_QTY = "food_qty"
         val FOOD_PRICE = "food_price"
         val Total_Price = "total"
+        //val Team_Members_IDs = "team_members_Ids"
         val Team_Members_IDs = "team_members_Ids"
 
     }
@@ -247,6 +298,17 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         }
 
         return   membersList
+    }
+
+
+    fun getMemberNameBill() = ArrayList<String>().apply{
+
+        var membersList: ArrayList<String>
+        membersList = ArrayList()
+
+
+
+
     }
 }
 
