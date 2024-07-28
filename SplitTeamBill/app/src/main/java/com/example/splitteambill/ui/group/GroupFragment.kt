@@ -113,7 +113,7 @@ class GroupFragment : Fragment() {
                // membersList.clear()
                 val age = 16
                 // name to our database
-                db.addName(memberName)
+                db.addName(memberName,0.0,0.0,0.0)
                  // Toast to message on the screen
                 Toast.makeText(requireContext(), memberName + " added to database", Toast.LENGTH_LONG).show()
 

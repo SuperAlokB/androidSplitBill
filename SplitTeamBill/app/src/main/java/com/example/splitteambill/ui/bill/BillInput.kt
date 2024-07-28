@@ -90,6 +90,7 @@ class BillInput:DialogFragment() {
                 //Calculate Bill total and add to to ths table
                 val total = (foodqty.toDouble() * foodprice.toDouble())
                 var finalTotal = 0.0
+                var eachContribution = 0.0
                 if(foodName !="") {
 
                     val SGST = (2.5 * total) / 100
@@ -104,12 +105,23 @@ class BillInput:DialogFragment() {
                 }
                 db.addBill(foodName,liquorName, foodqty.toDouble(),foodprice.toDouble(),finalTotal.toDouble())
 
+                var totalSelectedTeamMembers = 0
+                for (i in checkedItems.indices) {
+                    if (checkedItems[i]) {
+                        totalSelectedTeamMembers ++
+                    }
+                }
+
+                var contriForEachMember = finalTotal / totalSelectedTeamMembers.toDouble()
+                Toast.makeText(requireContext(), contriForEachMember.toString(),Toast.LENGTH_LONG).show()
                 for (i in checkedItems.indices) {
                     if (checkedItems[i]) {
                         //tvSelectedItemsPreview.text = String.format("%s%s, ", tvSelectedItemsPreview.text, selectedItems[i])
                         //Toast.makeText(requireContext(), selectedItems[i] + "Item Info :" + editTextValue, Toast.LENGTH_LONG).show()
-                        Toast.makeText(requireContext(), checkedItems[i].toString() + "index :" + listItems [i], Toast.LENGTH_LONG).show()
-                        db.updateBillWithTeamName(foodName,listItems [i].toString())
+                        //Toast.makeText(requireContext(), checkedItems[i].toString() + "index :" + listItems [i], Toast.LENGTH_LONG).show()
+                        db.updateBillWithTeamName(foodName,liquorName,listItems [i].toString())
+
+                        db.updateTeamWithBillDetails(foodName,liquorName,contriForEachMember,listItems [i].toString())
                     }
                 }
             }
