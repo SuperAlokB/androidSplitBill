@@ -36,6 +36,7 @@ class BillsFragment : Fragment() {
     lateinit var grandTotal: TextView
     lateinit var foodBill: TextView
     lateinit var liquorBill: TextView
+    lateinit var resetBtn : Button
 
     // initialise the list items for the alert dialog
 
@@ -66,7 +67,7 @@ class BillsFragment : Fragment() {
         gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             // Handle item click here
             val selectedItem = adapter.getItem(position)
-            // Perform actions based on the selected item
+            Toast.makeText(requireContext(), " edit " + selectedItem.toString(), Toast.LENGTH_LONG).show()
         }
         addBtn = binding.idBillBtnAdd
         grandTotal = binding.idTxTotalBill
@@ -75,6 +76,7 @@ class BillsFragment : Fragment() {
         grandTotal.text =  getTotalBill().toString()
         foodBill.text = getTotalFoodBill().toString()
         liquorBill.text = getTotalLiquorBill().toString()
+        resetBtn = binding.idBillBtnRemove
 
         addBtn.setOnClickListener {
 
@@ -86,12 +88,25 @@ class BillsFragment : Fragment() {
 
         }
 
+        resetBtn.setOnClickListener {
+
+            resetData()
+            Toast.makeText(requireContext(), " Cleared All Bill Information", Toast.LENGTH_LONG).show()
+        }
+
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun resetData(){
+
+        val db = DBHelper(requireContext(), null)
+       db.resetData()
+
     }
 
     // Replace this with your data source

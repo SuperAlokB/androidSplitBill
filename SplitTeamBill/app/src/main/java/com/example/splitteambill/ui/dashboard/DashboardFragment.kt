@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitteambill.R
+import com.example.splitteambill.data.DBHelper
 import com.example.splitteambill.data.User
 import com.example.splitteambill.databinding.FragmentDashboardBinding
 
@@ -27,9 +29,7 @@ class DashboardFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
     private lateinit var tableRecyclerView : RecyclerView
-    private var userList = ArrayList<User>()
-   // private lateinit var tableRowAdapter: TableRowAdapter
-    private lateinit var user : User
+    private lateinit var itemGrid: List<String>
 
 
     override fun onCreateView(
@@ -39,34 +39,20 @@ class DashboardFragment : Fragment() {
     ): View {
         val dashboardViewModel =
             ViewModelProvider(this).get(DashboardViewModel::class.java)
-
+        itemGrid = getData()
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        val gridView = binding.TeamGridView
         val root: View = binding.root
+        val adapter =
+            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, itemGrid)
+        gridView.numColumns = 4
 
-
-    val ll = binding.table as TableLayout
-    val tr = TableRow(activity)
-    val tv1 = TextView(activity)
-
-    tv1.setText("TEST NUMBER");
-    tv1.setTextColor(Color.BLACK);
-    //tv1.setTextSize(20.00);
-    tv1.setPadding(5, 5, 5, 5);
-    tr.addView(tv1);
-
-        val tv11 = TextView(activity)
-        tv11.setText("TEST NUMBER 1");
-        tv11.setTextColor(Color.BLACK);
-        tr.addView(tv11);
-        val tv2 = TextView(activity)
-        val tr1 = TableRow(activity)
-        tv2.setText("TEST NUMBER 2")
-        tv2.setTextColor(Color.BLACK)
-        //tv1.setTextSize(20.00);
-        tv2.setPadding(5, 5, 5, 5);
-        tr1.addView(tv2)
-        ll.addView(tr)
-        ll.addView(tr1)
+        gridView.adapter = adapter
+        gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            // Handle item click here
+            val selectedItem = adapter.getItem(position)
+            // Perform actions based on the selected item
+        }
 
 
 //        val textView: TextView = binding.textDashboard
@@ -79,5 +65,50 @@ class DashboardFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // Replace this with your data source
+    private fun getData(): List<String> {
+        val db = DBHelper(requireContext(), null)
+
+        val membersList = ArrayList<String>()
+        membersList as List<String?>
+        val cursor = db.getName()
+
+        if (cursor != null && cursor.count >= 0) {
+            // moving the cursor to first position and
+            // appending value in the text view
+            cursor!!.moveToFirst()
+            membersList.add("Name")
+            membersList.add("Food Bill")
+            membersList.add("Drinks Bill")
+            membersList.add("Total")
+
+
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_Bill)))
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.DRINKS_Bill)))
+            membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.TotalBill)))
+
+            while (cursor.moveToNext()) {
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
+
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.FOOD_Bill)))
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.DRINKS_Bill)))
+                membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.TotalBill)))
+
+
+
+            }
+        }
+        // membersList.add("Biryani")
+        //  membersList.add("Biryani2")
+        //  membersList.add("Biryani3")
+
+        return membersList
+
+
+        // return listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
     }
 }
