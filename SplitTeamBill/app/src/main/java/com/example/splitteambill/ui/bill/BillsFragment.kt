@@ -1,6 +1,5 @@
 package com.example.splitteambill.ui.bill
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.GridView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.splitteambill.data.DBHelper
 import com.example.splitteambill.databinding.FragmentBillsBinding
+import com.example.splitteambill.data.BillInfo
 
 
 private const val ARG_PARAM1 = "param1"
@@ -64,11 +63,28 @@ class BillsFragment : Fragment() {
         gridView.numColumns = 4
 
         gridView.adapter = adapter
-        gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+        gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, id ->
             // Handle item click here
-            val selectedItem = adapter.getItem(position)
-            Toast.makeText(requireContext(), " edit " + selectedItem.toString(), Toast.LENGTH_LONG).show()
+            val rowIndex = (position / 4 )
+            val itemIndex = (position % 4 )
+
+
+            if(position >  3  && itemIndex != 3) {
+                val itemName = itemGrid[rowIndex*4]
+                val itemQty =  itemGrid[(rowIndex*4)+1]
+                val itemPrice =  itemGrid[(rowIndex*4)+2]
+                // Toast.makeText(requireContext(), " Row ID " + rowIndex.toString() + " Item Index :" + itemIndex.toString(), Toast.LENGTH_LONG).show()
+                //Toast.makeText(requireContext(), "Item Selected : " + itemName , Toast.LENGTH_LONG).show()
+                val selectedItem = adapter.getItem(position)
+//                BillEdit(itemName.toString(),itemQty,itemPrice).show(
+//                    (activity as AppCompatActivity).supportFragmentManager,
+//                    "Bill Edit"
+//                )
+            }
+            Toast.makeText(requireContext(), "You are too much Drunk -- Reset all data And Ask other person to get bill--  ", Toast.LENGTH_LONG).show()
         }
+
+
         addBtn = binding.idBillBtnAdd
         grandTotal = binding.idTxTotalBill
         foodBill = binding.idTxtFoodBill
@@ -85,6 +101,7 @@ class BillsFragment : Fragment() {
             grandTotal.text =  getTotalBill().toString()
             foodBill.text = getTotalFoodBill().toString()
             liquorBill.text = getTotalLiquorBill().toString()
+            adapter.notifyDataSetChanged()
 
         }
 
@@ -92,6 +109,7 @@ class BillsFragment : Fragment() {
 
             resetData()
             Toast.makeText(requireContext(), " Cleared All Bill Information", Toast.LENGTH_LONG).show()
+            adapter.notifyDataSetChanged()
         }
 
         return root
@@ -109,6 +127,32 @@ class BillsFragment : Fragment() {
 
     }
 
+//    private fun getData(): List<BillInfo> {
+//        val db = DBHelper(requireContext(), null)
+//
+//        val membersList: ArrayList<BillInfo> = ArrayList<BillInfo>()
+//        membersList as List<BillInfo?>
+//        val cursor = db.getFoodNames()
+//        if (cursor != null && cursor.count > 0) {
+//            // moving the cursor to first position and
+//            // appending value in the text view
+//            cursor!!.moveToFirst()
+//            //membersList.add("Item")
+//            //membersList.add("Qty")
+//            //membersList.add("Price")
+//            //membersList.add("Total")
+//
+//            val bill: ArrayList<BillInfo> = ArrayList<BillInfo>()
+//            val newBill = BillInfo("biryani", "", 2.0, 300.0)
+//            val newBill11 = BillInfo("biryani1", "2", 3.0, 400.0)
+//            membersList.add(newBill)
+//            membersList.add(newBill11)
+//
+//
+//
+//        }
+//        return membersList
+//    }
     // Replace this with your data source
     private fun getData(): List<String> {
         val db = DBHelper(requireContext(), null)

@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,6 +61,20 @@ class DashboardFragment : Fragment() {
 //            textView.text = it
 //        }
         return root
+    }
+
+    override fun onResume() {
+        //Log.e("DEBUG", "onResume of LoginFragment");
+        itemGrid = getData()
+        val gridView = binding.TeamGridView
+        val adapter =
+            ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, itemGrid)
+        gridView.numColumns = 4
+
+        gridView.adapter = adapter
+        adapter.notifyDataSetChanged()
+        super.onResume()
+
     }
 
     override fun onDestroyView() {

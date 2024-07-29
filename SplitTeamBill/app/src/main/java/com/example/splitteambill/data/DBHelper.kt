@@ -421,6 +421,75 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
 
     }
+
+    fun updateBillInformation(oldName : String , newName: String , qty : String , price: String ){
+// a content values variable
+        val values = ContentValues()
+        //var selectionArrayName = ""
+        val db = this.writableDatabase
+        val getNameQuery = "Select * from Bill where food_name = '" + oldName + "'"
+        //val recordCount =  db.execSQL(getNameQuery)
+        val cursor = db.rawQuery(getNameQuery, null)
+           var selection = ""
+
+         if (cursor != null && cursor.count > 0) {
+
+            selection = "food_name = ?"
+            val total = (qty.toDouble() * price.toDouble())
+            val SGST = (2.5 * total) / 100
+            val CGST = (2.5 * total) / 100
+            val finalTotal = total.toDouble() + SGST.toDouble() + CGST.toDouble()
+            values.put(FOOD_NAME,newName)
+            values.put(TotalBill,finalTotal.toDouble())
+            //selectionArrayName = name
+
+        }else{
+            val total = (qty.toDouble() * price.toDouble())
+            values.put(TotalBill,total.toDouble())
+            values.put(LIQUOR_NAME,newName)
+            selection = "liquor_name = ?"
+            //selectionArrayName = name
+        }
+
+            values.put(FOOD_QTY,qty.toDouble())
+            values.put(FOOD_PRICE,price.toDouble())
+
+            val selectionArgs = arrayOf(oldName)
+            val count = db.update(
+                "Bill",
+                values,
+                selection,
+                selectionArgs
+            )
+
+
+    }
+
+    fun deleteBillRecord(oldName: String) {
+
+        //var selectionArrayName = ""
+        val db = this.writableDatabase
+        val getNameQuery = "Select * from Bill where food_name = '" + oldName + "'"
+        //val recordCount =  db.execSQL(getNameQuery)
+        val cursor = db.rawQuery(getNameQuery, null)
+        var selection = ""
+
+        if (cursor != null && cursor.count > 0) {
+
+            selection = "food_name = ?"
+
+
+
+        }else{
+
+
+            selection = "liquor_name = ?"
+
+        }
+
+        val selectionArgs = arrayOf(oldName)
+        db.delete("Bill", selection , selectionArgs)
+    }
 }
 
 
