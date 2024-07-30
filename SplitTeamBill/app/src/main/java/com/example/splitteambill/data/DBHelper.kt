@@ -223,7 +223,7 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 }
             }
             var sqlQuery = ""
-            if (food_name != null) {
+            if (food_name.isNotEmpty()) {
 
                 sqlQuery = "select team_members_Ids From Bill where food_name = '" + food_name + "'"
             } else {
@@ -239,7 +239,7 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 var old_TeamMember_Id =
                     cursor1.getString(cursor1.getColumnIndex(DBHelper.Team_Members_IDs))
 
-                if (TeamMember_Id == "") {
+                if (TeamMember_Id == null) {
 
                     while (cursor1.moveToNext()) {
                         old_TeamMember_Id =
@@ -279,6 +279,57 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     }
 
+    fun getTeamMembersFromBillForFood(name: String): String  {
+
+
+        val db = this.readableDatabase
+        var sqlQuery = ""
+        var  teamNamesForFood = ""
+        // below code returns a cursor to
+        // read data from the database
+        if(name.isNotEmpty()) {
+            sqlQuery = "SELECT team_members_Ids FROM Bill where  food_name = '" + name + "'"
+        }else{
+
+            sqlQuery = "SELECT team_members_Ids FROM Bill where  liquor_name = '" + name + "'"
+        }
+
+        val cursor =  db.rawQuery( sqlQuery, null)
+
+
+        if (cursor != null && cursor.count >= 0) {
+            // moving the cursor to first position and
+            // appending value in the text view
+            cursor.moveToFirst()
+            teamNamesForFood = cursor.getString(cursor.getColumnIndex(DBHelper.Team_Members_IDs))
+            while (cursor.moveToNext()) {
+                teamNamesForFood  = cursor.getString(cursor.getColumnIndex(DBHelper.Team_Members_IDs))
+            }
+        }
+
+        cursor.close()
+        return teamNamesForFood
+
+    }
+
+
+        //Get previous team members for specific food
+//        var  teamNamesForFood = ""
+//
+//        val cursor = db.getFoodNames()
+//
+//        if (cursor != null && cursor.count >= 0) {
+//            // moving the cursor to first position and
+//            // appending value in the text view
+//            cursor!!.moveToFirst()
+//            teamNamesForFood = cursor.getString(cursor.getColumnIndex(DBHelper.Team_Members_IDs))
+//            while (cursor.moveToNext()) {
+//                teamNamesForFood  = cursor.getString(cursor.getColumnIndex(DBHelper.Team_Members_IDs))
+//            }
+//        }
+
+
+
 
     // below method is to get
     // all data from our database
@@ -292,6 +343,9 @@ class DBHelper (context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // below code returns a cursor to
         // read data from the database
         return db.rawQuery("SELECT * FROM " + "Bill", null)
+
+
+
 
     }
 

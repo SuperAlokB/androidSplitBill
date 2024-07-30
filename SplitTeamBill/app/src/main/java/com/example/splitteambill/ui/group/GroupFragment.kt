@@ -130,7 +130,9 @@ class GroupFragment : Fragment() {
              //  membersList = db.getMemebersList()
                 // on below line we are notifying adapter
                 // that data in list is updated to update our list view.
-                adapter.notifyDataSetChanged()
+                //membersList = db.getMembersList()
+
+               // adapter.notifyDataSetChanged()
             }
             teamMateName.text.clear()
         }
@@ -154,10 +156,10 @@ class GroupFragment : Fragment() {
                 while(cursor.moveToNext()){
                     membersList.add(cursor.getString(cursor.getColumnIndex(DBHelper.NAME_COl)))
                 }
-
+               // membersList = db.getMembersList()
                 // on below line we are notifying adapter
                 // that data in list is updated to update our list view.
-                adapter.notifyDataSetChanged()
+                //adapter.notifyDataSetChanged()
             }
             teamMateName.text.clear()
 
@@ -169,11 +171,6 @@ class GroupFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private suspend fun getData(){
-
-
     }
 
 }

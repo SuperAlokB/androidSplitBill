@@ -93,7 +93,7 @@ class DashboardFragment : Fragment() {
         if (cursor != null && cursor.count >= 0) {
             // moving the cursor to first position and
             // appending value in the text view
-            cursor!!.moveToFirst()
+            cursor.moveToFirst()
             membersList.add("Name")
             membersList.add("Food Bill")
             membersList.add("Drinks Bill")

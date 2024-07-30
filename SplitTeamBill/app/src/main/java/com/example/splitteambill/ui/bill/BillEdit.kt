@@ -5,13 +5,14 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.splitteambill.data.DBHelper
 
 
 class BillEdit(selectedItem: String?,selectedItemQty: String?,selectedItemPrice: String?) :DialogFragment() {
 
-var selectedItemText = selectedItem
+    var selectedItemText = selectedItem
     var selectedItemQtyText = selectedItemQty
     var selectedItemPriceText = selectedItemPrice
 
@@ -19,8 +20,13 @@ var selectedItemText = selectedItem
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
 
+
+
+
             // initialise the list items for the alert dialog
             val db = DBHelper(requireContext(), null)
+
+
 
             val editTextName = EditText(requireContext())
             val editTextQty = EditText(requireContext())
@@ -45,8 +51,25 @@ var selectedItemText = selectedItem
             val builder = AlertDialog.Builder(requireContext())
 
             val listItems = db.getMembersList().toTypedArray()
-            //val listItems = arrayOf("C", "C++", "JAVA", "PYTHON")
             val checkedItems = BooleanArray(listItems.size)
+
+            var teamMembersForFood = db.getTeamMembersFromBillForFood(selectedItemText.toString())
+            val selectedMembers: List<String> = teamMembersForFood.split(",")
+            if(selectedMembers.isNotEmpty()) {
+                //Toast.makeText(requireContext(), "b4 Previous :$selectedMembers", Toast.LENGTH_LONG).show()
+                for (teamMemberId in selectedMembers) {
+                    if (teamMemberId.toString() != "null" ) {
+                        checkedItems[teamMemberId.toInt() - 1] = true
+                        //Toast.makeText(requireContext(), "1 Previous :" + (teamMemberId.toString()) , Toast.LENGTH_LONG).show()
+                    }
+                }
+            }else{
+                checkedItems[teamMembersForFood.toInt() - 1] = true
+                //Toast.makeText(requireContext(), "2 Previous :" + (selectedMembers[0].toString()) , Toast.LENGTH_LONG).show()
+            }
+
+
+
             // copy the items from the main list to the selected item list for the preview
             // if the item is checked then only the item should be displayed for the user
             val selectedItems = mutableListOf(*listItems)
@@ -81,7 +104,42 @@ var selectedItemText = selectedItem
                 if(newValePrice.isEmpty()){
                     newValePrice = selectedItemPriceText.toString()
                 }
+                //Update Team_Members Table
+
+                var totalSelectedTeamMembers = 0
+                for (i in checkedItems.indices) {
+                    if (checkedItems[i]) {
+                        totalSelectedTeamMembers ++
+                    }
+                }
+
+               // var teamMemebrsForFood = db.getTeamMembersFromBillForFood(selectedItemText.toString())
+
+                //var contriForEachMember = finalTotal / totalSelectedTeamMembers.toDouble()
+                //Toast.makeText(requireContext(), contriForEachMember.toString(), Toast.LENGTH_LONG).show()
+                for (i in checkedItems.indices) {
+                    if (checkedItems[i]) {
+
+                        //Toast.makeText(requireContext(), selectedItems[i] + "Item Info :" + editTextValue, Toast.LENGTH_LONG).show()
+
+                     // Find if it is same members or new member added
+
+                    }
+                }
+
+                //Get Team Members List for selected food
+
+
+
+
+
+                //Update Team Member Table -
+
+                //- Remove previous values
+                //Update Bill Table
                 db.updateBillInformation(selectedItemText.toString(),newValueName,newValueQty,newValePrice)
+                //Update Team table with new values
+
             }
 
             // handle the negative button of the alert dialog

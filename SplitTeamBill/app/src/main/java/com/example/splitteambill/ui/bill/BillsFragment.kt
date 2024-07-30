@@ -61,12 +61,13 @@ class BillsFragment : Fragment() {
         val adapter =
             ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, itemGrid)
         gridView.numColumns = 4
-
+        val db = DBHelper(requireContext(), null)
         gridView.adapter = adapter
         gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, id ->
             // Handle item click here
             val rowIndex = (position / 4 )
             val itemIndex = (position % 4 )
+            //Getting previous selected Items
 
 
             if(position >  3  && itemIndex != 3) {
@@ -76,12 +77,15 @@ class BillsFragment : Fragment() {
                 // Toast.makeText(requireContext(), " Row ID " + rowIndex.toString() + " Item Index :" + itemIndex.toString(), Toast.LENGTH_LONG).show()
                 //Toast.makeText(requireContext(), "Item Selected : " + itemName , Toast.LENGTH_LONG).show()
                 val selectedItem = adapter.getItem(position)
-//                BillEdit(itemName.toString(),itemQty,itemPrice).show(
-//                    (activity as AppCompatActivity).supportFragmentManager,
-//                    "Bill Edit"
-//                )
+
+
+
+                BillEdit(itemName.toString(),itemQty,itemPrice).show(
+                    (activity as AppCompatActivity).supportFragmentManager,
+                    "Bill Edit"
+                )
             }
-            Toast.makeText(requireContext(), "You are too much Drunk -- Reset all data And Ask other person to get bill--  ", Toast.LENGTH_LONG).show()
+           // Toast.makeText(requireContext(), "You are too much Drunk -- Reset all data And Ask other person to get bill--  ", Toast.LENGTH_LONG).show()
         }
 
 
